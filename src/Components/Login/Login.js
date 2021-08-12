@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import axios from 'axios';
 import heroImage from './heroImage.jpg';
 
 import Hero from '../Hero/Hero';
@@ -36,7 +37,7 @@ function Login () {
     const [password, setPassword] = useState('');
 
     const login = () => {
-        
+    
     }
 
     return(
@@ -55,7 +56,7 @@ function Login () {
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </form>
-            <Button>Zaloguj</Button>
+            <Button onClick={login}>Zaloguj</Button>
         </LoginContainer>
     )
 };

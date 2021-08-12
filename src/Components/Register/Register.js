@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import axios from 'axios';
 import heroImage from './heroImage.jpg';
 
 import Hero from '../Hero/Hero';
@@ -35,20 +36,21 @@ function Register () {
 
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [tel, setTel] = useState('');
+    const [emailAddress, setEmailAddress] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
 
     const register = () => {
-        fetch('http://34.118.42.248:8089/v1/restaurants/new', {
-            method: 'POST',
-            body: {
-                'emailAddress': email,
-                'password': password,
-                'phoneNumber': tel,
-            }
-        }). then((response) => {
-            console.log(response)
-        })
+        axios
+            .post('http://34.118.42.248:8089/v1/restaurants/new', {
+                name: name,
+                emailAddress: emailAddress,
+                password: password,
+                phoneNumber: phoneNumber,
+                cuisine: 'AMERICAN'
+            })
+            .then(response => {
+                console.log(response);
+            })
     }
 
     return(
@@ -69,12 +71,12 @@ function Register () {
                 <input 
                     type='text' 
                     placeholder='E-mail' 
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmailAddress(e.target.value)}
                 />
                 <input 
                     type='text' 
                     placeholder='Nr. telefonu' 
-                    onChange={(e) => setTel(e.target.value)}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                 />
             </form>
             <Button onClick={register}>Rejestracja</Button>
