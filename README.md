@@ -1,1 +1,1 @@
-restaurants-project.netlify.app
+https://restaurants-project.netlify.app/
