@@ -56,7 +56,7 @@ function Header() {
                     <Link to='/'><li>O nas</li></Link>
                     <Link to='/login'><li>Logowanie</li></Link>
                     <Link to='/register'><li>Rejestracja</li></Link>
-                    <li>Zarezerwuj stolik</li>
+                    <Link to='/restaurants-list'><li>Zarezerwuj stolik</li></Link>
                 </ul>
             </NavBar>
         </HeaderContainer>

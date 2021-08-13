@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useState } from 'react';
 import axios from 'axios';
 import heroImage from './heroImage.jpg';
@@ -16,7 +16,8 @@ const RegisterContainer = styled.section`
     }
 
     & form {
-        padding: 2rem;
+        padding: 1rem;
+        padding-bottom: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -30,16 +31,29 @@ const RegisterContainer = styled.section`
             text-align: center;
         }
     }
+
+    & p {
+        color: red;
+        margin-bottom: 1rem;
+    }
 `;
 
 function Register () {
 
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [message, setMessage] = useState('');
 
     const register = () => {
+
+        if(password !== confirmPassword) {
+            setMessage('Hasło zostało niepoprawnie powtórzone!');
+            return;
+        }
+
         axios
             .post('http://34.118.42.248:8089/v1/restaurants/new', {
                 name: name,
@@ -61,12 +75,18 @@ function Register () {
                 <input 
                     type='text' 
                     placeholder="Nazwa restauracji" 
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                     onChange={(e) => setName(e.target.value)}
                 />
                 <input
                     type='password' 
                     placeholder="Hasło" 
                     onChange={(e) => setPassword(e.target.value)}
+                />
+                <input
+                    type='password'
+                    placeholder='Powtórz hasło'
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <input 
                     type='text' 
@@ -79,6 +99,7 @@ function Register () {
                     onChange={(e) => setPhoneNumber(e.target.value)}
                 />
             </form>
+            <p>{message}</p>
             <Button onClick={register}>Rejestracja</Button>
         </RegisterContainer>
     )

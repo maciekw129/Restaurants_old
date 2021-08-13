@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import heroImage from './heroImage.jpg';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import Button from '../Button/Button';
 import Hero from '../Hero/Hero';
