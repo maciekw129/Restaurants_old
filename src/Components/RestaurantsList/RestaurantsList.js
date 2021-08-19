@@ -15,7 +15,7 @@ function RestaurantsList () {
     }, [])
 
     const fetchRestaurants = async () => {
-        await axios.get('http://34.118.42.248:8089/v1/restaurants/all')
+        await axios.get('https://34.118.42.248:8089/v1/restaurants/all')
         .then((response) => {
             setRestaurants(response.data)
         })
