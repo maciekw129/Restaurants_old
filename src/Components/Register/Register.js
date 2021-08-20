@@ -55,7 +55,7 @@ function Register () {
         }
 
         axios
-            .post('https://34.118.42.248:8089/v1/restaurants/new', {
+            .post('https://100liki.com:8089/v1/restaurants/new', {
                 name: name,
                 emailAddress: emailAddress,
                 password: password,
