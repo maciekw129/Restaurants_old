@@ -56,12 +56,7 @@ function Register () {
             setMessage('Pola nie mogą być puste!')
         }
 
-<<<<<<< HEAD
         axios.post('https://100liki.com:8089/v1/restaurants/new', {
-=======
-        axios
-            .post('https://100liki.com:8089/v1/restaurants/new', {
->>>>>>> b820ef81bdab07e3c5c985e0f56b00bbfd9fbde4
                 name: name,
                 emailAddress: emailAddress,
                 password: password,
