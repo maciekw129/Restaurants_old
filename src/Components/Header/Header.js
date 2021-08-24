@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 
 const HeaderContainer = styled.header`
@@ -39,12 +39,21 @@ const NavBar = styled.nav`
     }
 `
 
-function Header() {
+function Header({ isLogged, toggleIsLogged, changeToken }) {
 
     const [isNavVisible, setIsNavVisible] = useState(false);
+    const history = useHistory();
 
     const handleClick = () => {
         setIsNavVisible(!isNavVisible);
+    }
+
+    const logout = () => {
+        setTimeout(() => {
+            toggleIsLogged();
+            changeToken('');
+        }, 1000);
+        history.push('/');
     }
 
     return(
@@ -52,12 +61,21 @@ function Header() {
             <Link to='/'><h1>Restaurants</h1></Link>
             <i className={isNavVisible ? 'fas fa-times' : 'fas fa-bars'} onClick={handleClick}></i>
             <NavBar isNavVisible={isNavVisible}>
+                {isLogged ? 
                 <ul onClick={handleClick}>
-                    <Link to='/'><li>O nas</li></Link>
+                    <Link to='/your-restaurant'><li>Twoja restauracja</li></Link>
+                    <Link to='/restaurant-data'><li>Zmień dane restauracji</li></Link>
+                    <Link to='/my-restaurant-reservations'><li>Podgląd rezerwacji</li></Link>
+                    <li onClick={logout}>Wyloguj się</li>
+                </ul>
+                :
+                <ul onClick={handleClick}>
+                    <Link to='/'><li>Strona Główna</li></Link>
                     <Link to='/login'><li>Logowanie</li></Link>
                     <Link to='/register'><li>Rejestracja</li></Link>
-                    <Link to='/restaurants-list'><li>Zarezerwuj stolik</li></Link>
+                    <li>O nas</li>
                 </ul>
+                }
             </NavBar>
         </HeaderContainer>
     );

@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import heroImage from './heroImage.jpg';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 
-import Button from '../Button/Button';
 import Hero from '../Hero/Hero';
 
 const AboutContainer = styled.section`
@@ -23,6 +21,14 @@ const AboutContainer = styled.section`
         & h4 {
             padding-bottom: 0.5rem;
         }
+
+        & input {
+            border: 2px solid #FC8E1B;
+            border-radius: 50px;
+            padding: 0.5rem 2rem;
+            background-color: white;
+            text-align: center;
+        }
     }
 
     & article {
@@ -32,7 +38,10 @@ const AboutContainer = styled.section`
     }
 `;
 
-function About () {
+function MainPage () {
+
+    const [restaurant, setRestaurant] = useState('');
+
     return(
        <AboutContainer>
            <Hero 
@@ -40,13 +49,15 @@ function About () {
            />
            <div className="reservationContainer">
                <h4>Znajdź lokal i złóż rezerwację!</h4>
-               <Button>Rezerwuję</Button>
+               <input 
+                    type='text' 
+                    placeholder='Nazwa restauracji' 
+                    onChange={(e) => setRestaurant(e.target.value)}
+                    value={restaurant}
+                />
            </div>
-           <article>
-               <h2>O Nas</h2>
-           </article>
        </AboutContainer> 
     )
 }
 
-export default About;
+export default MainPage;

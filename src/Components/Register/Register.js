@@ -33,7 +33,7 @@ const RegisterContainer = styled.section`
     }
 
     & p {
-        color: red;
+        color: ${props => props.messageColor};
         margin-bottom: 1rem;
     }
 `;
@@ -46,16 +46,17 @@ function Register () {
     const [emailAddress, setEmailAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [message, setMessage] = useState('');
+    const [messageColor, setMessageColor] = useState('red')
 
     const register = () => {
 
         if(password !== confirmPassword) {
             setMessage('Hasło zostało niepoprawnie powtórzone!');
-            return;
+        } else if (password === '' || name === '' || emailAddress === '' || phoneNumber === '') {
+            setMessage('Pola nie mogą być puste!')
         }
 
-        axios
-            .post('http://34.118.42.248:8089/v1/restaurants/new', {
+        axios.post('https://100liki.com:8089/v1/restaurants/new', {
                 name: name,
                 emailAddress: emailAddress,
                 password: password,
@@ -63,39 +64,54 @@ function Register () {
                 cuisine: 'AMERICAN'
             })
             .then(response => {
-                console.log(response);
+                console.log(response)
+                if(response.status === 200) {
+                    setMessageColor('green');
+                    setMessage('Rejestracja przebiegła pomyślnie!');
+                    setName('');
+                    setEmailAddress('');
+                    setPassword('');
+                    setConfirmPassword('');
+                    setPhoneNumber('');
+                } else {
+                    setMessage('Coś poszło nie tak, spróbuj jeszcze raz.')
+                }
             })
     }
 
     return(
-        <RegisterContainer>
+        <RegisterContainer messageColor={messageColor}>
             <Hero heroImage={heroImage} />
             <h1>Rejestracja</h1>
             <form>
                 <input 
                     type='text' 
-                    placeholder="Nazwa restauracji" 
-                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    placeholder="Nazwa restauracji"
+                    value={name} 
                     onChange={(e) => setName(e.target.value)}
                 />
                 <input
                     type='password' 
-                    placeholder="Hasło" 
+                    placeholder="Hasło"
+                    value={password} 
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <input
                     type='password'
                     placeholder='Powtórz hasło'
+                    value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <input 
                     type='text' 
-                    placeholder='E-mail' 
+                    placeholder='E-mail'
+                    value={emailAddress}
                     onChange={(e) => setEmailAddress(e.target.value)}
                 />
                 <input 
                     type='text' 
-                    placeholder='Nr. telefonu' 
+                    placeholder='Nr. telefonu'
+                    value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                 />
             </form>
