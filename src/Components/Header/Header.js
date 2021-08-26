@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { LoggedContext } from '../../LoggedContext';
+import { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 
@@ -39,9 +40,10 @@ const NavBar = styled.nav`
     }
 `
 
-function Header({ isLogged, toggleIsLogged, changeToken }) {
+function Header() {
 
     const [isNavVisible, setIsNavVisible] = useState(false);
+    const { isLogged, toggleIsLogged, setToken} = useContext(LoggedContext)
     const history = useHistory();
 
     const handleClick = () => {
@@ -51,7 +53,7 @@ function Header({ isLogged, toggleIsLogged, changeToken }) {
     const logout = () => {
         setTimeout(() => {
             toggleIsLogged();
-            changeToken('');
+            setToken('');
         }, 1000);
         history.push('/');
     }

@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { useState } from 'react';
 import axios from 'axios';
-import heroImage from './heroImage.jpg';
+import { LoggedContext } from '../../LoggedContext';
+import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import heroImage from './heroImage.jpg';
 
 import Hero from '../Hero/Hero';
 import Button from '../Button/Button';
@@ -32,19 +33,19 @@ const LoginContainer = styled.section`
     }
 
     & p {
-        color: ${props => props.messageColor};
+        color: red;
         margin-bottom: 1.75rem;
     }
 `;
 
-function Login ({changeToken, toggleIsLogged}) {
+function Login () {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [messageColor, setMessageColor] = useState('red');
     const [message, setMessage] = useState('')
 
     const history = useHistory();
+    const { toggleIsLogged, setToken, setRestaurantId } = useContext(LoggedContext);
 
     const login = () => {
         axios.post('https://100liki.com:8089/v1/restaurants/auth', {
@@ -53,28 +54,23 @@ function Login ({changeToken, toggleIsLogged}) {
         })
         .then(response => {
             console.log(response)
-            if(response.status == 200) {
-                changeToken(response.data.token);
+            if(response.status === 200) {
+                setToken(response.data.token);
+                setRestaurantId(response.data.restaurantId);
                 toggleIsLogged();
-                setMessageColor('green');
-                setMessage('Logowanie się powiodło!')
-                setEmail('');
-                setPassword('');
                 history.push('/your-restaurant');
             } else {
-                setMessageColor('red');
                 setMessage('Coś poszło nie tak, spróbuj jeszcze raz.')
             }
         })
         .catch(error => {
             console.log(error);
-            setMessageColor('red');
-            setMessage('Coś poszło nie tak, spróbuj jeszcze raz.')
+            setMessage('Coś poszło nie tak, spróbuj jeszcze raz.');
         })
     }
 
     return(
-        <LoginContainer messageColor={messageColor}>
+        <LoginContainer>
             <Hero heroImage={heroImage} />
             <h1>Logowanie</h1>
             <form>

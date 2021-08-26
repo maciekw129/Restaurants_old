@@ -67,7 +67,7 @@ function Register () {
                 console.log(response)
                 if(response.status === 200) {
                     setMessageColor('green');
-                    setMessage('Rejestracja przebiegła pomyślnie!');
+                    setMessage('Rejestracja przebiegła pomyślnie, możesz się teraz zalogować.s');
                     setName('');
                     setEmailAddress('');
                     setPassword('');
