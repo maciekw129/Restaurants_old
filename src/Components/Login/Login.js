@@ -7,6 +7,7 @@ import heroImage from './heroImage.jpg';
 
 import Hero from '../Hero/Hero';
 import Button from '../Button/Button';
+import Loading from '../Loading/Loading';
 
 const LoginContainer = styled.section`
     display: flex;
@@ -19,6 +20,7 @@ const LoginContainer = styled.section`
 
     & form {
         padding: 2rem;
+        padding-bottom: 0;
         display: flex;
         flex-direction: column;
 
@@ -34,7 +36,7 @@ const LoginContainer = styled.section`
 
     & p {
         color: red;
-        margin-bottom: 1.75rem;
+        margin: 1.75rem 0;
     }
 `;
 
@@ -42,13 +44,16 @@ function Login () {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState(' ')
+    const [isLoading, setIsLoading] = useState(false);
 
     const history = useHistory();
     const { toggleIsLogged, setToken, setRestaurantId } = useContext(LoggedContext);
 
     const login = () => {
-        axios.post('https://100liki.com:8089/v1/restaurants/auth', {
+        setMessage(' ');
+        setIsLoading(true)
+        axios.post('https://100liki.com:8079/v1/restaurants/auth', {
             emailAddress: email,
             password: password,
         })
@@ -60,10 +65,12 @@ function Login () {
                 toggleIsLogged();
                 history.push('/your-restaurant');
             } else {
-                setMessage('Coś poszło nie tak, spróbuj jeszcze raz.')
+                setIsLoading(false);
+                setMessage('Coś poszło nie tak, spróbuj jeszcze raz.');
             }
         })
         .catch(error => {
+            setIsLoading(false);
             console.log(error);
             setMessage('Coś poszło nie tak, spróbuj jeszcze raz.');
         })
@@ -87,7 +94,9 @@ function Login () {
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </form>
-            <p>{message}</p>
+            {isLoading ?
+            <Loading />
+            : <p>{message}</p>}
             <Button onClick={login}>Zaloguj</Button>
         </LoginContainer>
     )

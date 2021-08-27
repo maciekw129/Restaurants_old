@@ -33,6 +33,14 @@ const NavBar = styled.nav`
     transition: left 0.5s ease-in-out;
     background-color: white;
 
+    & ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
     & ul li {
         padding: 0.75rem 0;
         text-align: center;
@@ -66,7 +74,6 @@ function Header() {
                 {isLogged ? 
                 <ul onClick={handleClick}>
                     <Link to='/your-restaurant'><li>Twoja restauracja</li></Link>
-                    <Link to='/restaurant-data'><li>Zmień dane restauracji</li></Link>
                     <Link to='/my-restaurant-reservations'><li>Podgląd rezerwacji</li></Link>
                     <li onClick={logout}>Wyloguj się</li>
                 </ul>
@@ -75,7 +82,6 @@ function Header() {
                     <Link to='/'><li>Strona Główna</li></Link>
                     <Link to='/login'><li>Logowanie</li></Link>
                     <Link to='/register'><li>Rejestracja</li></Link>
-                    <li>O nas</li>
                 </ul>
                 }
             </NavBar>
