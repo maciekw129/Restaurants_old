@@ -1,10 +1,11 @@
 import styled from 'styled-components/macro';
-import { useState } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
+import useForm from '../../customHooks/useForm';
 import heroImage from './heroImage.jpg';
-
+import axios from 'axios';
 import Hero from '../Hero/Hero';
 import Button from '../Button/Button';
+import validate from './validate';
 
 const RegisterContainer = styled.section`
     display: flex;
@@ -33,89 +34,83 @@ const RegisterContainer = styled.section`
     }
 
     & p {
-        color: ${props => props.messageColor};
+        color: red;
         margin-bottom: 1rem;
     }
 `;
 
 function Register () {
 
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [emailAddress, setEmailAddress] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [message, setMessage] = useState('');
-    const [messageColor, setMessageColor] = useState('red')
+    const { values, handleChange } = useForm();
+    const [errorMessages, setErrorMessages] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if(isSubmitting && Object.keys(errorMessages).length === 0) {
+            axios.post(`https://100liki.com:8079/v1/restaurants/new`, {
+            name: values.restaurantName,
+            emailAddress: values.emailAddress,
+            password: values.password,
+            phoneNumber: values.phoneNumber,
+            cuisine: 'AMERICAN',
+        })
+        .then(response => {
+            console.log(response);
+        })
+        } 
+    }, [errorMessages]);
 
     const register = () => {
-
-        if(password !== confirmPassword) {
-            setMessage('Hasło zostało niepoprawnie powtórzone!');
-        } else if (password === '' || name === '' || emailAddress === '' || phoneNumber === '') {
-            setMessage('Pola nie mogą być puste!')
-        }
-
-        axios.post('https://100liki.com:8079/v1/restaurants/new', {
-                name: name,
-                emailAddress: emailAddress,
-                password: password,
-                phoneNumber: phoneNumber,
-                cuisine: 'AMERICAN'
-            })
-            .then(response => {
-                console.log(response)
-                if(response.status === 200) {
-                    setMessageColor('green');
-                    setMessage('Rejestracja przebiegła pomyślnie, możesz się teraz zalogować.s');
-                    setName('');
-                    setEmailAddress('');
-                    setPassword('');
-                    setConfirmPassword('');
-                    setPhoneNumber('');
-                } else {
-                    setMessage('Coś poszło nie tak, spróbuj jeszcze raz.')
-                }
-            })
+        setErrorMessages(validate(values));
+        setIsSubmitting(true);
     }
 
     return(
-        <RegisterContainer messageColor={messageColor}>
+        <RegisterContainer>
             <Hero heroImage={heroImage} />
             <h1>Rejestracja</h1>
             <form>
                 <input 
                     type='text' 
                     placeholder="Nazwa restauracji"
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)}
+                    value={values.restaurantName}
+                    name='restaurantName'
+                    onChange={handleChange}
                 />
+                {errorMessages.restaurantName ? <p>{errorMessages.restaurantName}</p> : null}
                 <input
                     type='password' 
-                    placeholder="Hasło"
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder='Hasło'
+                    value={values.password}
+                    name='password'
+                    onChange={handleChange}
                 />
+                {errorMessages.password ? <p>{errorMessages.password}</p> : null}
                 <input
                     type='password'
                     placeholder='Powtórz hasło'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={values.confirmPassword}
+                    name='confirmPassword'
+                    onChange={handleChange}
                 />
+                {errorMessages.confirmPassword ? <p>{errorMessages.confirmPassword}</p> : null}
                 <input 
-                    type='text' 
+                    type='email' 
                     placeholder='E-mail'
-                    value={emailAddress}
-                    onChange={(e) => setEmailAddress(e.target.value)}
+                    value={values.emailAddress}
+                    name='emailAddress'
+                    onChange={handleChange}
                 />
+                {errorMessages.emailAddress ? <p>{errorMessages.emailAddress}</p> : null}
                 <input 
-                    type='text' 
+                    type='number' 
                     placeholder='Nr. telefonu'
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    value={values.phoneNumber}
+                    name='phoneNumber'
+                    onChange={handleChange}
                 />
+                {errorMessages.phoneNumber ? <p>{errorMessages.phoneNumber}</p> : null}
             </form>
-            <p>{message}</p>
             <Button onClick={register}>Rejestracja</Button>
         </RegisterContainer>
     )
