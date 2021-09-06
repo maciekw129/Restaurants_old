@@ -8,6 +8,11 @@ const useForm = () => {
         emailAddress: '',
         phoneNumber: '',
         cuisine: '',
+        address: {
+            street: '',
+            zipCode: '',
+            apartmentNumber: '',
+        }
     });
 
     const handleChange = (e) => {

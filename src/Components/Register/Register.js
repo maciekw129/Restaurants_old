@@ -1,11 +1,13 @@
 import styled from 'styled-components/macro';
 import { useState, useEffect } from 'react';
 import useForm from '../../customHooks/useForm';
-import heroImage from './heroImage.jpg';
-import axios from 'axios';
+
 import Hero from '../Hero/Hero';
 import Button from '../Button/Button';
+
+import heroImage from './heroImage.jpg';
 import validate from './validate';
+import requests from '../../utilites/requests';
 
 const RegisterContainer = styled.section`
     display: flex;
@@ -15,6 +17,10 @@ const RegisterContainer = styled.section`
     & h1 {
         margin-top: 2rem;
     }
+
+    & h3 {
+        margin-top: 2rem;
+    } 
 
     & form {
         padding: 1rem;
@@ -37,6 +43,10 @@ const RegisterContainer = styled.section`
         color: red;
         margin-bottom: 1rem;
     }
+
+    & span {
+        color: green;
+    }
 `;
 
 function Register () {
@@ -44,23 +54,22 @@ function Register () {
     const { values, handleChange } = useForm();
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         if(isSubmitting && Object.keys(errorMessages).length === 0) {
-            axios.post(`https://100liki.com:8079/v1/restaurants/new`, {
-            name: values.restaurantName,
-            emailAddress: values.emailAddress,
-            password: values.password,
-            phoneNumber: values.phoneNumber,
-            cuisine: 'AMERICAN',
-        })
-        .then(response => {
-            console.log(response);
-        })
+            requests.register(values)
+            .then(response => {
+                if(response.status === 200) {
+                    console.log(response);
+                    setMessage('Rejestracja przebiegła pomyślnie! Możesz się teraz zalogować.')
+                }
+            })
         } 
     }, [errorMessages]);
 
     const register = () => {
+        setMessage('');
         setErrorMessages(validate(values));
         setIsSubmitting(true);
     }
@@ -70,6 +79,7 @@ function Register () {
             <Hero heroImage={heroImage} />
             <h1>Rejestracja</h1>
             <form>
+                <h3>Główne informacje</h3>
                 <input 
                     type='text' 
                     placeholder="Nazwa restauracji"
@@ -110,7 +120,31 @@ function Register () {
                     onChange={handleChange}
                 />
                 {errorMessages.phoneNumber ? <p>{errorMessages.phoneNumber}</p> : null}
-            </form>
+            <h3>Adres</h3>
+
+            <input 
+                    type='text' 
+                    placeholder='Ulica'
+                    value={values.address.street}
+                    name='street'
+                    onChange={handleChange}
+                />
+            <input 
+                    type='number' 
+                    placeholder='Kod pocztowy'
+                    value={values.address.zipCode}
+                    name='zipCode'
+                    onChange={handleChange}
+                />
+            <input 
+                    type='number' 
+                    placeholder='Numer budynku'
+                    value={values.address.apartmentNumber}
+                    name='apartmentNumber'
+                    onChange={handleChange}
+                />
+                </form>
+            <p><span>{message}</span></p>
             <Button onClick={register}>Rejestracja</Button>
         </RegisterContainer>
     )

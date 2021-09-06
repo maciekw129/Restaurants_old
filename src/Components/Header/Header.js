@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { LoggedContext } from '../../LoggedContext';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 
@@ -51,18 +50,15 @@ const NavBar = styled.nav`
 function Header() {
 
     const [isNavVisible, setIsNavVisible] = useState(false);
-    const { isLogged, toggleIsLogged, setToken} = useContext(LoggedContext)
     const history = useHistory();
+    const userData = localStorage.getItem('userData');
 
     const handleClick = () => {
         setIsNavVisible(!isNavVisible);
     }
 
     const logout = () => {
-        setTimeout(() => {
-            toggleIsLogged();
-            setToken('');
-        }, 1000);
+        localStorage.removeItem('userData');
         history.push('/');
     }
 
@@ -71,7 +67,7 @@ function Header() {
             <Link to='/'><h1>Restaurants</h1></Link>
             <i className={isNavVisible ? 'fas fa-times' : 'fas fa-bars'} onClick={handleClick}></i>
             <NavBar isNavVisible={isNavVisible}>
-                {isLogged ? 
+                {userData ? 
                 <ul onClick={handleClick}>
                     <Link to='/your-restaurant'><li>Twoja restauracja</li></Link>
                     <Link to='/my-restaurant-reservations'><li>Podgląd rezerwacji</li></Link>

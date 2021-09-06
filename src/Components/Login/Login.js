@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import axios from 'axios';
-import { LoggedContext } from '../../LoggedContext';
-import { useState, useContext } from 'react';
+import requests from '../../utilites/requests';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import useForm from '../../customHooks/useForm';
 import heroImage from './heroImage.jpg';
 
 import Hero from '../Hero/Hero';
@@ -42,37 +42,25 @@ const LoginContainer = styled.section`
 
 function Login () {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [message, setMessage] = useState(' ')
     const [isLoading, setIsLoading] = useState(false);
+    const { values, handleChange } = useForm();
 
     const history = useHistory();
-    const { toggleIsLogged, setToken, setRestaurantId } = useContext(LoggedContext);
 
     const login = () => {
         setMessage(' ');
         setIsLoading(true)
-        axios.post('https://100liki.com:8079/v1/restaurants/auth', {
-            emailAddress: email,
-            password: password,
-        })
+        requests.login(values)
         .then(response => {
-            console.log(response)
+            console.log(response);
             if(response.status === 200) {
-                setToken(response.data.token);
-                setRestaurantId(response.data.restaurantId);
-                toggleIsLogged();
+                localStorage.setItem('userData', JSON.stringify(response.data));
                 history.push('/your-restaurant');
             } else {
                 setIsLoading(false);
                 setMessage('Coś poszło nie tak, spróbuj jeszcze raz.');
             }
-        })
-        .catch(error => {
-            setIsLoading(false);
-            console.log(error);
-            setMessage('Coś poszło nie tak, spróbuj jeszcze raz.');
         })
     }
 
@@ -84,14 +72,16 @@ function Login () {
                 <input 
                     type='text'
                     placeholder='E-mail'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={values.emailAddress}
+                    name='emailAddress'
+                    onChange={handleChange}
                 />
                 <input 
                     type='password'
                     placeholder='Hasło'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={values.password}
+                    name='password'
+                    onChange={handleChange}
                 />
             </form>
             {isLoading ?

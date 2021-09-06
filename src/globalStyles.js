@@ -17,6 +17,14 @@ const GlobalStyles = createGlobalStyle`
     li {
         list-style-type: none;
     }
+
+    input {
+        border: none;
+        background-color: hsl(0, 0%, 95%);
+        border-radius: 5px;
+        padding: 0.75rem 1rem;
+        text-align: center;
+    }
 `;
 
 export default GlobalStyles
