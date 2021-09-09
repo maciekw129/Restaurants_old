@@ -21,6 +21,10 @@ const HeaderContainer = styled.header`
     & i:hover, h1 {
         cursor: pointer;
     }
+
+    & span {
+        color: #FC8E1B;
+    }
 `;
 
 const NavBar = styled.nav`
@@ -64,7 +68,7 @@ function Header({ setIsLogged, isLogged }) {
 
     return(
         <HeaderContainer>
-            <Link to='/'><h1>Restaurants</h1></Link>
+            <Link to='/'><h1><span>R</span>estaurants<span>.</span></h1></Link>
             <i className={isNavVisible ? 'fas fa-times' : 'fas fa-bars'} onClick={handleClick}></i>
             <NavBar isNavVisible={isNavVisible}>
                 {isLogged ? 

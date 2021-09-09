@@ -159,21 +159,21 @@ function Register ({ isLogged }) {
             <input 
                     type='text' 
                     placeholder='Ulica'
-                    value={values.address.street}
+                   
                     name='street'
                     onChange={handleChange}
                 />
             <input 
                     type='number' 
                     placeholder='Kod pocztowy'
-                    value={values.address.zipCode}
+                   
                     name='zipCode'
                     onChange={handleChange}
                 />
             <input 
                     type='number' 
                     placeholder='Numer budynku'
-                    value={values.address.apartmentNumber}
+                    
                     name='apartmentNumber'
                     onChange={handleChange}
                 />

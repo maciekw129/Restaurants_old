@@ -19,6 +19,10 @@ const requests = {
             password: values.password,
         });
     },
+
+    getAllRestaurants() {
+        return axios.get(API + 'all')
+    },
     
     fetchRestaurantData(restaurantId, token) {
         return axios.get(API + restaurantId, {
