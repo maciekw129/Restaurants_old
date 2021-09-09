@@ -1,5 +1,6 @@
 import styled from 'styled-components/macro';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import useForm from '../../customHooks/useForm';
 
 import Hero from '../Hero/Hero';
@@ -29,13 +30,18 @@ const RegisterContainer = styled.section`
         flex-direction: column;
         align-items: center;
 
-        & input {
+        & input, select {
             margin: 1rem;
             border: none;
             background-color: hsl(0, 0%, 95%);
             border-radius: 5px;
             padding: 0.75rem 1rem;
             text-align: center;
+            text-align-last:center
+        }
+
+        &select::invalid {
+            color: gray;
         }
     }
 
@@ -49,14 +55,19 @@ const RegisterContainer = styled.section`
     }
 `;
 
-function Register () {
+function Register ({ isLogged }) {
 
     const { values, handleChange } = useForm();
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState('');
 
+    const history = useHistory();
+
     useEffect(() => {
+        if(isLogged) {
+            history.push('/');
+        }
         if(isSubmitting && Object.keys(errorMessages).length === 0) {
             requests.register(values)
             .then(response => {
@@ -120,6 +131,29 @@ function Register () {
                     onChange={handleChange}
                 />
                 {errorMessages.phoneNumber ? <p>{errorMessages.phoneNumber}</p> : null}
+                <select name='cuisine' onChange={handleChange} >
+                    <option value='' disabled selected hidden>Kuchnia</option>
+                    <option value='AMERICAN'>Amerykańska</option>
+                    <option value='POLISH'>Polska</option>
+                    <option value='CHINESE'>Chińska</option>
+                    <option value='GREEK'>Grecka</option>
+                    <option value='INDIAN'>Indyjska</option>
+                    <option value='MEXICAN'>Meksykańska</option>
+                    <option value='ITALIAN'>Włoska</option>
+                    <option value='PIZZA'>Pizza</option>
+                    <option value='BURGERS'>Burgery</option>
+                    <option value='SUSHI'>Sushi</option>
+                    <option value='ASIAN'>Azjatycka</option>
+                    <option value='TURKISH'>Turecka</option>
+                    <option value='KEBAB'>Kebab</option>
+                    <option value='THAI'>Tajska</option>
+                    <option value='VEGETARIAN'>Wegetariańska</option>
+                    <option value='GEORGIAN'>Gruzińska</option>
+                    <option value='SPANISH'>Hiszpańska</option>
+                    <option value='ARABIC'>Arabska</option>
+                    <option value='INTERNATIONAL'>Międzynarodowa</option>
+                    <option value='FRENCH'>Francuska</option>
+                </select>
             <h3>Adres</h3>
 
             <input 

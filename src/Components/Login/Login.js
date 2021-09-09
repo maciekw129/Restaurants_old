@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import requests from '../../utilites/requests';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import useForm from '../../customHooks/useForm';
 import heroImage from './heroImage.jpg';
@@ -40,13 +40,19 @@ const LoginContainer = styled.section`
     }
 `;
 
-function Login () {
+function Login ({ setIsLogged, isLogged }) {
 
     const [message, setMessage] = useState(' ')
     const [isLoading, setIsLoading] = useState(false);
     const { values, handleChange } = useForm();
 
     const history = useHistory();
+
+    useEffect(() => {
+        if(isLogged) {
+            history.push('/');
+        }
+    })
 
     const login = () => {
         setMessage(' ');
@@ -56,7 +62,8 @@ function Login () {
             console.log(response);
             if(response.status === 200) {
                 localStorage.setItem('userData', JSON.stringify(response.data));
-                history.push('/your-restaurant');
+                setIsLogged(true);
+                history.push('/');
             } else {
                 setIsLoading(false);
                 setMessage('Coś poszło nie tak, spróbuj jeszcze raz.');

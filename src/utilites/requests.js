@@ -28,11 +28,39 @@ const requests = {
         });
     },
 
-    newAddress(restaurantId, address) {
+    newAddress(restaurantId, values, token) {
         return axios.post(API + restaurantId + '/newAddress', {
-                street: address.street,
-                zipCode: address.zipCode,
-                apartmentNumber: address.apartmentNumber,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+
+            body: {
+                street: values.street,
+                zipCode: values.zipCode,
+                apartmentNumber: values.apartmentNumber,
+                zipCode: values.zipCode,
+            },
+        });
+    },
+
+    getReservations(restaurantId, token) {
+        return axios.get(API + 'reservations/all/' + restaurantId, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+    },
+
+    newTable(restaurantId, token, values) {
+        return axios.post(API + restaurantId + '/tables/new', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+
+            body: {
+                peopleQuantity: values.peopleQuantity,
+                description: values.description,
+            }
         });
     },
 }

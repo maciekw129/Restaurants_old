@@ -18,7 +18,8 @@ const GlobalStyles = createGlobalStyle`
         list-style-type: none;
     }
 
-    input {
+    input, select {
+        width: 13rem;
         border: none;
         background-color: hsl(0, 0%, 95%);
         border-radius: 5px;

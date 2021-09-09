@@ -47,11 +47,10 @@ const NavBar = styled.nav`
     }
 `
 
-function Header() {
+function Header({ setIsLogged, isLogged }) {
 
     const [isNavVisible, setIsNavVisible] = useState(false);
     const history = useHistory();
-    const userData = localStorage.getItem('userData');
 
     const handleClick = () => {
         setIsNavVisible(!isNavVisible);
@@ -59,6 +58,7 @@ function Header() {
 
     const logout = () => {
         localStorage.removeItem('userData');
+        setIsLogged(false);
         history.push('/');
     }
 
@@ -67,10 +67,10 @@ function Header() {
             <Link to='/'><h1>Restaurants</h1></Link>
             <i className={isNavVisible ? 'fas fa-times' : 'fas fa-bars'} onClick={handleClick}></i>
             <NavBar isNavVisible={isNavVisible}>
-                {userData ? 
+                {isLogged ? 
                 <ul onClick={handleClick}>
-                    <Link to='/your-restaurant'><li>Twoja restauracja</li></Link>
-                    <Link to='/my-restaurant-reservations'><li>Podgląd rezerwacji</li></Link>
+                    <Link to='/'><li>Twoja restauracja</li></Link>
+                    <Link to='/restaurant-tables'><li>Twoje stoliki i rezerwacje</li></Link>
                     <li onClick={logout}>Wyloguj się</li>
                 </ul>
                 :
